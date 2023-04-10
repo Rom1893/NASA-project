@@ -1,0 +1,21 @@
+{
+  "name": "nasa-project",
+  "version": "1.0.0",
+  "description": "A backend project using NASA data",
+  "main": "index.js",
+  "scripts": {
+    "i-server": "npm i --prefix server",
+    "i-client": "npm i --prefix client",
+    "i": "npm run i-server && npm run i-client",
+    "server": "npm run watch --prefix server",
+    "client": "npm start --prefix client",
+    "watch": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "npm run test --prefix server && npm run test --prefix client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
