@@ -5,15 +5,7 @@
     "**/.svn": true,
     "**/.hg": true,
     "**/CVS": true,
-    "**/.DS_Store": true,
-    ".vscode/": true,
-    ".gitignore": true,
-    ".gitattributes": true,
-    "README.md": true,
-    "node_modules/": true,
-    "server/node_modules/": true,
-    "client/node_modules/": true,
-    "client/README.md": true
+    "**/.DS_Store": true
   },
-  "hidefiles.selectedProfile": "React/Node"
+  "hidefiles.selectedProfile": "Show All Files"
 }
