@@ -1,3 +1,5 @@
+const request = require("supertest");
+
 describe("Test GET /launches", () => {
   test("It should respond with 200 success", () => {
     const response = 200;
