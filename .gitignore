@@ -120,6 +120,9 @@ dist
 .vscode-test
 .vscode/
 
+# MongoDB playground
+MongoPG/
+
 # yarn v2
 .yarn/cache
 .yarn/unplugged
