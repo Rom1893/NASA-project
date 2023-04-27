@@ -6,7 +6,7 @@ const { loadPlanetsData } = require("./models/planets.model");
 
 const server = http.createServer(app);
 const MONGO_URL =
-  "mongodb+srv://r@nasacluster.hlvqmua.mongodb.net/nasa?retryWrites=true&w=majority";
+  "mongodb+srv://@nasacluster.hlvqmua.mongodb.net/nasa?retryWrites=true&w=majority";
 
 const startServer = async () => {
   mongoose.connect(MONGO_URL, {
