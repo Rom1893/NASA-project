@@ -6,6 +6,7 @@ const { loadPlanetsData } = require("./models/planets.model");
 
 const server = http.createServer(app);
 const MONGO_URL =
+  //Add .env File
   "mongodb+srv://@nasacluster.hlvqmua.mongodb.net/nasa?retryWrites=true&w=majority";
 
 const startServer = async () => {
