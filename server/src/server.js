@@ -3,11 +3,10 @@ const mongoose = require("mongoose");
 const app = require("./app"); // Express app from another file
 const PORT = process.env.PORT || 8000;
 const { loadPlanetsData } = require("./models/planets.model");
+require("dotenv").config();
 
 const server = http.createServer(app);
-const MONGO_URL =
-  //Add .env File
-  "mongodb+srv://@nasacluster.hlvqmua.mongodb.net/nasa?retryWrites=true&w=majority";
+const MONGO_URL = process.env.MONGO_URL;
 
 const startServer = async () => {
   mongoose.connect(MONGO_URL, {
