@@ -2,8 +2,27 @@ const launchesDatabase = require("./launches.mongo");
 const planets = require("./planets.mongo");
 
 const DEFAULT_FLIGHT_NUMBER = 100;
-
 let latestFlightNumber = 100;
+
+/**
+ * *TEMPLATE LAUNCH
+ */
+
+const launch = {
+  flightNumber: 100,
+  mission: "Kepler Exploration X",
+  rocket: "Explorer IS1",
+  launchDate: new Date("December 27, 2030"),
+  target: "Kepler-442 b",
+  customers: ["NASA", "ROM"],
+  upcoming: true,
+  success: true,
+};
+
+/**
+ * *SAVE LAUNCH FUNCTION
+ * @param launch
+ */
 
 const saveLaunch = async (launch) => {
   const planet = await planets.findOne({
@@ -25,18 +44,11 @@ const saveLaunch = async (launch) => {
   );
 };
 
-const launch = {
-  flightNumber: 100,
-  mission: "Kepler Exploration X",
-  rocket: "Explorer IS1",
-  launchDate: new Date("December 27, 2030"),
-  target: "Kepler-442 b",
-  customers: ["NASA", "ROM"],
-  upcoming: true,
-  success: true,
-};
-
 saveLaunch(launch);
+
+/**
+ * *GET METHODS
+ */
 
 async function findLaunch(filter) {
   return await launchesDatabase.findOne(filter);
@@ -67,6 +79,10 @@ const getAllLaunches = async () => {
   );
 };
 
+/**
+ * *ADD NEW LAUNCH
+ */
+
 const scheduleNewLaunch = async (launch) => {
   const newFlightNumber = (await getLatestFlightNumber()) + 1;
 
@@ -80,6 +96,10 @@ const scheduleNewLaunch = async (launch) => {
   await saveLaunch(newLaunch);
 };
 
+/**
+ * *ABORT LAUNCH
+ */
+
 const abortLaunchById = async (launchId) => {
   return await launchesDatabase.updateOne(
     {
@@ -91,6 +111,10 @@ const abortLaunchById = async (launchId) => {
     }
   );
 };
+
+/**
+ * *EXPORTS
+ */
 
 module.exports = {
   existsLaunchWithId,
