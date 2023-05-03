@@ -1,30 +1,23 @@
 const http = require("http");
-const mongoose = require("mongoose");
 const app = require("./app"); // Express app from another file
-const PORT = process.env.PORT || 8000;
+const { mongoConnect } = require("./services/mongo");
 const { loadPlanetsData } = require("./models/planets.model");
-require("dotenv").config();
-
 const server = http.createServer(app);
-const MONGO_URL = process.env.MONGO_URL;
+
+const PORT = process.env.PORT || 8000;
+
+/**
+ * *Connect Mongoose Function
+ * mongoConnect function is imported from services, mongo.js
+ * this way server,js looks cleaner and only takes thje PORT variable from the .env file
+ */
 
 const startServer = async () => {
-  mongoose.connect(MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  await mongoConnect;
   await loadPlanetsData();
   server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}...`);
   });
 };
-
-mongoose.connection.once("open", () => {
-  console.log("MongoDB connection ready");
-});
-
-mongoose.connection.on("error", (err) => {
-  console.error(err);
-});
 
 startServer();

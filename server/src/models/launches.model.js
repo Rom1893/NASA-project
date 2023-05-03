@@ -101,7 +101,7 @@ const scheduleNewLaunch = async (launch) => {
  */
 
 const abortLaunchById = async (launchId) => {
-  return await launchesDatabase.updateOne(
+  const aborted = await launchesDatabase.updateOne(
     {
       flightNumber: launchId,
     },
@@ -110,6 +110,7 @@ const abortLaunchById = async (launchId) => {
       success: false,
     }
   );
+  return aborted.ok === 1 && aborted.nModified === 1;
 };
 
 /**

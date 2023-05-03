@@ -5,9 +5,17 @@ const {
   abortLaunchById,
 } = require("../../models/launches.model");
 
+/**
+ * *For the GET METHOD of all launches
+ */
+
 const httpGetAllLaunches = async (req, res) => {
   return res.status(200).json(await getAllLaunches());
 };
+
+/**
+ * *Add new Launch with validation
+ */
 
 const httpAddNewLaunch = async (req, res) => {
   const launch = req.body;
@@ -36,6 +44,11 @@ const httpAddNewLaunch = async (req, res) => {
   return res.status(201).json(launch);
 };
 
+/**
+ * *Abort launch, validates if launch exists, then aborts.
+ * +req.params.id = Converts req.params.id to number (with the + sign)
+ */
+
 const httpAbortLaunch = async (req, res) => {
   const launchId = +req.params.id;
   const existLaunch = await existsLaunchWithId(launchId);
@@ -47,7 +60,19 @@ const httpAbortLaunch = async (req, res) => {
   }
 
   const aborted = abortLaunchById(launchId);
-  return res.status(200).json({ aborted });
+  if (!aborted) {
+    return res.status(400).json({
+      error: "Launch not aborted",
+    });
+  }
+
+  return res.status(200).json({
+    ok: true,
+  });
 };
+
+/**
+ * *EXPORTS
+ */
 
 module.exports = { httpGetAllLaunches, httpAddNewLaunch, httpAbortLaunch };
