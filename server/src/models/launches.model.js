@@ -1,7 +1,6 @@
 const launchesDatabase = require("./launches.mongo");
 const planets = require("./planets.mongo");
 
-const launches = new Map();
 const DEFAULT_FLIGHT_NUMBER = 100;
 
 let latestFlightNumber = 100;
@@ -15,7 +14,7 @@ const saveLaunch = async (launch) => {
     throw new Error("No matching planet was found");
   }
 
-  await launchesDatabase.updateOne(
+  await launchesDatabase.findOneAndUpdate(
     {
       flightNumber: launch.flightNumber,
     },
@@ -39,12 +38,18 @@ const launch = {
 
 saveLaunch(launch);
 
-const existsLaunchWithId = (launchId) => {
-  return launches.has(launchId);
+async function findLaunch(filter) {
+  return await launchesDatabase.findOne(filter);
+}
+
+const existsLaunchWithId = async (launchId) => {
+  return await findLaunch({
+    flightNumber: launchId,
+  });
 };
 
 const getLatestFlightNumber = async () => {
-  const latestLaunch = await launchesDatabase.sort("-flightNumber").findOne({});
+  const latestLaunch = await launchesDatabase.findOne({}).sort("-flightNumber");
 
   if (!latestLaunch) {
     return DEFAULT_FLIGHT_NUMBER;
@@ -71,32 +76,26 @@ const scheduleNewLaunch = async (launch) => {
     customers: ["NASA", "ROM"],
     flightNumber: newFlightNumber,
   });
+
+  await saveLaunch(newLaunch);
 };
 
-// const addNewLaunch = (launch) => {
-//   latestFlightNumber++;
-//   launches.set(
-//     launch.flightNumber,
-//     Object.assign(launch, {
-//       flightNumber: latestFlightNumber,
-//       customers: ["NASA", "ROM"],
-//       upcoming: true,
-//       success: true,
-//     })
-//   );
-// };
-
-const abortLaunchById = (launchId) => {
-  const aborted = launches.get(launchId);
-  aborted.upcoming = false;
-  aborted.success = false;
-  return aborted;
+const abortLaunchById = async (launchId) => {
+  return await launchesDatabase.updateOne(
+    {
+      flightNumber: launchId,
+    },
+    {
+      upcoming: false,
+      success: false,
+    }
+  );
 };
 
 module.exports = {
   existsLaunchWithId,
   getAllLaunches,
-  addNewLaunch,
+  scheduleNewLaunch,
   abortLaunchById,
 };
 //MongoDB now

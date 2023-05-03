@@ -1,7 +1,7 @@
 const {
   existsLaunchWithId,
   getAllLaunches,
-  addNewLaunch,
+  scheduleNewLaunch,
   abortLaunchById,
 } = require("../../models/launches.model");
 
@@ -9,7 +9,7 @@ const httpGetAllLaunches = async (req, res) => {
   return res.status(200).json(await getAllLaunches());
 };
 
-const httpAddNewLaunch = (req, res) => {
+const httpAddNewLaunch = async (req, res) => {
   const launch = req.body;
 
   if (
@@ -32,14 +32,15 @@ const httpAddNewLaunch = (req, res) => {
 
   launch.launchDate = new Date(launch.launchDate);
 
-  addNewLaunch(launch);
+  await scheduleNewLaunch(launch);
   return res.status(201).json(launch);
 };
 
-const httpAbortLaunch = (req, res) => {
+const httpAbortLaunch = async (req, res) => {
   const launchId = +req.params.id;
+  const existLaunch = await existsLaunchWithId(launchId);
 
-  if (!existsLaunchWithId(launchId)) {
+  if (!existLaunch) {
     return res.status(404).json({
       error: "Launch not found",
     });
