@@ -10,6 +10,11 @@ app.use(
     origin: "http://localhost:3000",
   })
 );
+/**
+ * *morgan("combined")
+ * is used to log the HTTP requests in the "combined" format, which includes the HTTP method, status code, response time, and other details. The output of these logs can be used for debugging, monitoring, and performance analysis.
+ */
+
 app.use(morgan("combined"));
 
 app.use(express.json());
