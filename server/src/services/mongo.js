@@ -18,6 +18,7 @@ mongoose.connection.on("error", (err) => {
 /**
  * *Mongo Connect Function
  * this function is exported to server.js for connecting to mongo
+ * no need to add newUrlParser and other common options
  */
 
 const mongoConnect = async () => {
