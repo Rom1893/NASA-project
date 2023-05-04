@@ -17,7 +17,7 @@ mongoose.connection.on("error", (err) => {
 
 /**
  * *Mongo Connect Function
- * this function is exported to server.js for connectting to mongo
+ * this function is exported to server.js for connecting to mongo
  */
 
 const mongoConnect = async () => {
@@ -27,6 +27,14 @@ const mongoConnect = async () => {
   });
 };
 
+/**
+ * *Mongo disconnect function
+ * used in launches.test, allowing jest to exit and not stick around
+ */
+
+const mongoDisconnect = async () => await mongoose.disconnect;
+
 module.exports = {
   mongoConnect,
+  mongoDisconnect,
 };
