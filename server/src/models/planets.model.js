@@ -5,6 +5,10 @@ const path = require("path");
 const planets = require("./planets.mongo");
 const { get } = require("http");
 
+/**
+ * *Logic for finding habitable planets depending on 4 parameters
+ */
+
 const isHabitablePlanet = (planet) => {
   return (
     planet["koi_disposition"] === "CONFIRMED" &&
@@ -13,6 +17,13 @@ const isHabitablePlanet = (planet) => {
     planet["koi_prad"] < 1.6
   );
 };
+
+/**
+ * *How the planets should be saved
+ * first find the planet through its name
+ * then changed the variable to the new name
+ * set upsert to true
+ */
 
 savePlanet = async (planet) => {
   try {
