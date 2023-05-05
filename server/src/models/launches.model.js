@@ -49,11 +49,12 @@ saveLaunch(launch);
 
 /**
  * *LoadLaunchesData from SPACE-X API
+ * *Iterate over the SPACE-X API data
  */
 
 const SPACEX_API_URL = "https://api.spacexdata.com/v5/launches/query";
 
-const LoadLaunchesData = async () => {
+const loadLaunchData = async () => {
   console.log("Downloading Data");
   const response = await axios.post(SPACEX_API_URL, {
     query: {},
@@ -74,19 +75,34 @@ const LoadLaunchesData = async () => {
       ],
     },
   });
+  /**
+   * I used the keyword *DOCS* because the SPACE-X API sends me an object with the key DOCS that corresponds to an array with all the data I'm interested in.
+   * This iteration lets me gather the info I'm interested in, and create another object called launch with that same data but more compact.
+   */
+
+  const launchDocs = response.data.docs;
+  for (let launchDoc of launchDocs) {
+    const payloads = launchDoc.payloads;
+    /**
+     * Since payloads is an array, what I want to do here is to create a single array with all the customers, for that I use the flatMap built in JS function, which takes the payloads array, looks for the customer variable in the object, then takes the payloads array and customers array variable I looked for and flattens them into a single array.
+     */
+    const customers = payloads.flatMap((payload) => {
+      return payload.customers;
+    });
+
+    const launch = {
+      flightNumber: launchDoc["flight_number"],
+      mission: launchDoc.name,
+      rocket: launchDoc.rocket.name,
+      launchDate: launchDoc["date_local"],
+      upcoming: launchDoc.upcoming,
+      success: launchDoc.success,
+      customers,
+    };
+
+    console.log(`${launch.flightNumber} ${launch.mission}`);
+  }
 };
-
-/**
- * *
- * I used the keyword *DOCS* because the SPACE-X API sends me an object with the key DOCS that corresponds to an array with all the data I'm interested in.
- */
-
-const launchDocs = response.data.docs;
-for (let launch of launchDocs) {
-  const launch = {
-    flightNumber: launchDoc["flight_number"],
-  };
-}
 
 /**
  * *GET METHODS
@@ -160,7 +176,7 @@ const abortLaunchById = async (launchId) => {
  */
 
 module.exports = {
-  LoadLaunchesData,
+  loadLaunchData,
   existsLaunchWithId,
   getAllLaunches,
   scheduleNewLaunch,
