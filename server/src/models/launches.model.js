@@ -47,6 +47,14 @@ const saveLaunch = async (launch) => {
 saveLaunch(launch);
 
 /**
+ * *LoadLaunchesData
+ */
+
+const LoadLaunchesData = () => {
+  console.log("Downloading Data");
+};
+
+/**
  * *GET METHODS
  */
 
@@ -118,6 +126,7 @@ const abortLaunchById = async (launchId) => {
  */
 
 module.exports = {
+  LoadLaunchesData,
   existsLaunchWithId,
   getAllLaunches,
   scheduleNewLaunch,
