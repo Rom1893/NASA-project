@@ -48,14 +48,14 @@ const saveLaunch = async (launch) => {
 saveLaunch(launch);
 
 /**
- * *LoadLaunchesData
+ * *LoadLaunchesData, SPACE-X API
  */
 
 const SPACEX_API_URL = "https://api.spacexdata.com/v5/launches/query";
 
 const LoadLaunchesData = async () => {
   console.log("Downloading Data");
-  await axios.post(SPACEX_API_URL, {
+  const response = await axios.post(SPACEX_API_URL, {
     query: {},
     options: {
       populate: [
@@ -65,10 +65,28 @@ const LoadLaunchesData = async () => {
             name: 1,
           },
         },
+        {
+          path: "payloads",
+          select: {
+            customers: 1,
+          },
+        },
       ],
     },
   });
 };
+
+/**
+ * *
+ * I used the keyword *DOCS* because the SPACE-X API sends me an object with the key DOCS that corresponds to an array with all the data I'm interested in.
+ */
+
+const launchDocs = response.data.docs;
+for (let launch of launchDocs) {
+  const launch = {
+    flightNumber: launchDoc["flight_number"],
+  };
+}
 
 /**
  * *GET METHODS
