@@ -1,5 +1,6 @@
 const launchesDatabase = require("./launches.mongo");
 const planets = require("./planets.mongo");
+const axios = require("axios");
 
 const DEFAULT_FLIGHT_NUMBER = 100;
 let latestFlightNumber = 100;
@@ -9,14 +10,14 @@ let latestFlightNumber = 100;
  */
 
 const launch = {
-  flightNumber: 100,
-  mission: "Kepler Exploration X",
-  rocket: "Explorer IS1",
-  launchDate: new Date("December 27, 2030"),
-  target: "Kepler-442 b",
-  customers: ["NASA", "ROM"],
-  upcoming: true,
-  success: true,
+  flightNumber: 100 /**This info is under flight_number in the spaceX API */,
+  mission: "Kepler Exploration X" /** name in the spaceX API */,
+  rocket: "Explorer IS1" /** rocket.name in the spaceX API */,
+  launchDate: new Date("December 27, 2030") /** date_local in the spaceX API */,
+  target: "Kepler-442 b" /** not applicable */,
+  customers: ["NASA", "ROM"] /** payload.customers for each payload */,
+  upcoming: true /**upcoming */,
+  success: true /**success */,
 };
 
 /**
@@ -50,8 +51,23 @@ saveLaunch(launch);
  * *LoadLaunchesData
  */
 
-const LoadLaunchesData = () => {
+const SPACEX_API_URL = "https://api.spacexdata.com/v5/launches/query";
+
+const LoadLaunchesData = async () => {
   console.log("Downloading Data");
+  await axios.post(SPACEX_API_URL, {
+    query: {},
+    options: {
+      populate: [
+        {
+          path: "rocket",
+          select: {
+            name: 1,
+          },
+        },
+      ],
+    },
+  });
 };
 
 /**
