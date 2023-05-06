@@ -26,14 +26,6 @@ const launch = {
  */
 
 const saveLaunch = async (launch) => {
-  const planet = await planets.findOne({
-    keplerName: launch.target,
-  });
-
-  if (!planet) {
-    throw new Error("No matching planet was found");
-  }
-
   await launchesDatabase.findOneAndUpdate(
     {
       flightNumber: launch.flightNumber,
@@ -77,6 +69,11 @@ const populatelaunches = async () => {
       ],
     },
   });
+
+  if (response.status !== 200) {
+    console.log("Problem downloading launch data");
+    throw new Error("Launch data download failed");
+  }
   /**
    * I used the keyword *DOCS* because the SPACE-X API sends me an object with the key DOCS that corresponds to an array with all the data I'm interested in.
    * This iteration lets me gather the info I'm interested in, and create another object called launch with that same data but more compact.
@@ -102,11 +99,8 @@ const populatelaunches = async () => {
       customers,
     };
 
-    console.log(`${launch.flightNumber} ${launch.mission}`);
+    await saveLaunch(launch);
   }
-  /**
-   * TODO: Populate launches Collection
-   */
 };
 
 const loadLaunchData = async () => {
@@ -163,6 +157,14 @@ const getAllLaunches = async () => {
  */
 
 const scheduleNewLaunch = async (launch) => {
+  const planet = await planets.findOne({
+    keplerName: launch.target,
+  });
+
+  if (!planet) {
+    throw new Error("No matching planet was found");
+  }
+
   const newFlightNumber = (await getLatestFlightNumber()) + 1;
 
   const newLaunch = Object.assign(launch, {
