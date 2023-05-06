@@ -48,13 +48,14 @@ const saveLaunch = async (launch) => {
 saveLaunch(launch);
 
 /**
+ * *Populate launches
  * *LoadLaunchesData from SPACE-X API
  * *Iterate over the SPACE-X API data
  */
 
-const SPACEX_API_URL = "https://api.spacexdata.com/v5/launches/query";
+const SPACEX_API_URL = "https://api.spacexdata.com/v4/launches/query";
 
-const loadLaunchData = async () => {
+const populatelaunches = async () => {
   console.log("Downloading Data");
   const response = await axios.post(SPACEX_API_URL, {
     query: {},
@@ -103,10 +104,29 @@ const loadLaunchData = async () => {
 
     console.log(`${launch.flightNumber} ${launch.mission}`);
   }
+  /**
+   * TODO: Populate launches Collection
+   */
+};
+
+const loadLaunchData = async () => {
+  /** To Check if the launch I searched in the API exists */
+  const firstLaunch = await findLaunch({
+    flightNumber: 1,
+    rocket: "Falcon 1",
+    mission: "FalconSat",
+  });
+  if (firstLaunch) {
+    console.log("Launch data already loaded");
+  } else {
+    await populatelaunches();
+  }
 };
 
 /**
- * *GET METHODS
+ * *FIND METHODS
+ * @param filter Object to be used when mongo is queried
+ * just like when I search for a flight like flightNumber
  */
 
 async function findLaunch(filter) {
@@ -183,4 +203,3 @@ module.exports = {
   scheduleNewLaunch,
   abortLaunchById,
 };
-//MongoDB now
