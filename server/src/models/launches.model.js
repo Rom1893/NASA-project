@@ -7,23 +7,7 @@ const DEFAULT_FLIGHT_NUMBER = 100;
 let latestFlightNumber = 100;
 
 /**
- * *TEMPLATE LAUNCH
- */
-
-const launch = {
-  flightNumber: 100 /**This info is under flight_number in the spaceX API */,
-  mission: "Kepler Exploration X" /** name in the spaceX API */,
-  rocket: "Explorer IS1" /** rocket.name in the spaceX API */,
-  launchDate: new Date("December 27, 2030") /** date_local in the spaceX API */,
-  target: "Kepler-442 b" /** not applicable */,
-  customers: ["NASA", "ROM"] /** payload.customers for each payload */,
-  upcoming: true /**upcoming */,
-  success: true /**success */,
-};
-
-/**
  * *SAVE LAUNCH FUNCTION
- * @param launch
  */
 
 const saveLaunch = async (launch) => {
@@ -37,8 +21,6 @@ const saveLaunch = async (launch) => {
     }
   );
 };
-
-saveLaunch(launch);
 
 /**
  * *Populate launches
@@ -143,9 +125,14 @@ const getLatestFlightNumber = async () => {
   return latestLaunch.flightNumber;
 };
 
+/**
+ * *Pagination
+ */
+
 const getAllLaunches = async (skip, limit) => {
   return await launchesDatabase
     .find({}, { _id: 0, __v: 0 })
+    .sort({ flightNumber: 1 })
     .skip(skip)
     .limit(limit);
 };
