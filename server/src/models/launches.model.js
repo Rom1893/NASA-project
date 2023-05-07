@@ -1,6 +1,7 @@
 const launchesDatabase = require("./launches.mongo");
 const planets = require("./planets.mongo");
 const axios = require("axios");
+const { getPagination } = require("../services/query");
 
 const DEFAULT_FLIGHT_NUMBER = 100;
 let latestFlightNumber = 100;
@@ -118,7 +119,7 @@ const loadLaunchData = async () => {
 };
 
 /**
- * *FIND METHODS
+ * *FIND and GET METHODS
  * @param filter Object to be used when mongo is queried
  * just like when I search for a flight like flightNumber
  */
@@ -142,14 +143,11 @@ const getLatestFlightNumber = async () => {
   return latestLaunch.flightNumber;
 };
 
-const getAllLaunches = async () => {
-  return await launchesDatabase.find(
-    {},
-    {
-      _id: 0,
-      __v: 0,
-    }
-  );
+const getAllLaunches = async (skip, limit) => {
+  return await launchesDatabase
+    .find({}, { _id: 0, __v: 0 })
+    .skip(skip)
+    .limit(limit);
 };
 
 /**

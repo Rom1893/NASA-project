@@ -4,13 +4,17 @@ const {
   scheduleNewLaunch,
   abortLaunchById,
 } = require("../../models/launches.model");
+const { getPagination } = require("../../services/query");
 
 /**
  * *For the GET METHOD of all launches
+ * The function gets the skip and limit parameters from the getPagination function. The getPagination function calculates these parameters based on the query parameters sent with the request. The skip parameter is used to skip the specified number of launches, and the limit parameter is used to specify how many launches to get.
  */
 
 const httpGetAllLaunches = async (req, res) => {
-  return res.status(200).json(await getAllLaunches());
+  const { skip, limit } = getPagination(req.query);
+  const launches = await getAllLaunches(skip, limit);
+  return res.status(200).json(launches);
 };
 
 /**
