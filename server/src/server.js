@@ -11,6 +11,7 @@ const { loadPlanetsData } = require("./models/planets.model");
 const { loadLaunchData } = require("./models/launches.model");
 
 /**
+ * TODO: CONNECT TO DOCKER
  * *Connect Mongoose Function
  * mongoConnect function is imported from services, mongo.js
  * this way server,js looks cleaner and only takes thje PORT variable from the .env file
