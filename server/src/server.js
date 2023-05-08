@@ -6,7 +6,7 @@ const app = require("./app"); // Express app from another file
 const { mongoConnect } = require("./services/mongo");
 const server = http.createServer(app);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 const { loadPlanetsData } = require("./models/planets.model");
 const { loadLaunchData } = require("./models/launches.model");
 
