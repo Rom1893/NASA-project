@@ -28,7 +28,7 @@ const saveLaunch = async (launch) => {
  * *Iterate over the SPACE-X API data
  */
 
-const SPACEX_API_URL = "https://api.spacexdata.com/v4/launches/query";
+const SPACEX_API_URL = "https://api.spacexdata.com/v5/launches/query";
 
 const populatelaunches = async () => {
   console.log("Downloading Data");
